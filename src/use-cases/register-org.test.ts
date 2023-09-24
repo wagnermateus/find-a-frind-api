@@ -1,7 +1,7 @@
 import { InMemoryOrgsRepository } from "@/Repositories/in-memory/orgs-repository";
 import { it, describe, beforeEach, expect } from "vitest";
 import { RegisteOrgUseCase } from "./register-org";
-import { OrgAlreadyExistsError } from "./Errors/org-already-exists";
+import { OrgAlreadyExistsError } from "./Errors/org-already-exists-error";
 import { compare } from "bcryptjs";
 
 let orgsRepository: InMemoryOrgsRepository;
@@ -13,8 +13,8 @@ describe("Register Org Use Case", () => {
   });
   it("should to registe a Org", async () => {
     const { org } = await sut.execute({
-      name_of_representative: "Remar",
-      email: "remar@email.com",
+      name_of_representative: "Fulano",
+      email: "orgr@email.com",
       address: "Vila de Viana ",
       phone: "+244 930258963",
       password: "123456",
