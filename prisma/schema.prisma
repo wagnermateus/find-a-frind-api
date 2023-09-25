@@ -13,13 +13,13 @@ datasource db {
 enum Energy {
   LOW
   MEDIUM
-  HiGN
+  HIGH
 }
 
 enum Independence {
   LOW
   MEDIUM
-  HiGN
+  HIGH
 }
 
 model ORG {
@@ -45,8 +45,8 @@ model PET {
   level_of_independence Independence
   created_at            DateTime     @default(now())
 
-  org    ORG    @relation(fields: [org_Id], references: [id])
-  org_Id String
+  org    ORG    @relation(fields: [org_id], references: [id])
+  org_id String
 
   @@map("pets")
 }
