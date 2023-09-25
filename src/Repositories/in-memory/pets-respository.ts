@@ -7,7 +7,7 @@ export class InMemoryPetsRepository implements PetsRepository {
 
   async create(data: Prisma.PETUncheckedCreateInput) {
     const pet = {
-      id: randomUUID(),
+      id: data.id ? data.id : randomUUID(),
       name: data.name,
       about: data.about,
       birth: new Date(data.birth),
@@ -18,6 +18,16 @@ export class InMemoryPetsRepository implements PetsRepository {
     };
 
     this.items.push(pet);
+    return pet;
+  }
+
+  async findById(id: string) {
+    const pet = this.items.find((item) => item.id === id);
+
+    if (!pet) {
+      return null;
+    }
+
     return pet;
   }
 }

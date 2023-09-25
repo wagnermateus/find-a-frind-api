@@ -3,6 +3,8 @@ import { it, describe, beforeEach, expect } from "vitest";
 import { RegisteOrgUseCase } from "./register-org";
 import { OrgAlreadyExistsError } from "./Errors/org-already-exists-error";
 import { compare } from "bcryptjs";
+import { InvalidAddress } from "./Errors/invalid-address-error";
+import { InvalidPhone } from "./Errors/invalid-phone-error";
 
 let orgsRepository: InMemoryOrgsRepository;
 let sut: RegisteOrgUseCase;
@@ -25,9 +27,9 @@ describe("Register Org Use Case", () => {
   });
 
   it("should not be able to register with same email twice", async () => {
-    const email = "remar@email.com";
+    const email = "org@email.com";
     sut.execute({
-      name_of_representative: "Remar",
+      name_of_representative: "Fulano",
       email,
       address: "Vila de Viana ",
       phone: "+244 930258963",
@@ -37,7 +39,7 @@ describe("Register Org Use Case", () => {
 
     await expect(
       sut.execute({
-        name_of_representative: "Remar",
+        name_of_representative: "Fulano",
         email,
         address: "Vila de Viana ",
         phone: "+244 930258963",
@@ -49,8 +51,8 @@ describe("Register Org Use Case", () => {
 
   it("Should hash org password upon registration", async () => {
     const { org } = await sut.execute({
-      name_of_representative: "Remar",
-      email: "remar@email.com",
+      name_of_representative: "fulano",
+      email: "fulano@email.com",
       address: "Vila de Viana ",
       phone: "+244 930258963",
       password: "123456",
@@ -63,5 +65,31 @@ describe("Register Org Use Case", () => {
     );
 
     expect(isPasswordCorrectlyHashed).toBe(true);
+  });
+
+  it("Should not be able to registe without address", async () => {
+    await expect(
+      sut.execute({
+        name_of_representative: "fulano",
+        email: "fulano@email.com",
+        address: "",
+        phone: "+244 930258963",
+        password: "123456",
+        nif: "0489LDN78B",
+      })
+    ).rejects.toBeInstanceOf(InvalidAddress);
+  });
+
+  it("Should not be able to registe without phone number", async () => {
+    await expect(
+      sut.execute({
+        name_of_representative: "fulano",
+        email: "fulano@email.com",
+        address: "Luanda",
+        phone: "",
+        password: "123456",
+        nif: "0489LDN78B",
+      })
+    ).rejects.toBeInstanceOf(InvalidPhone);
   });
 });
