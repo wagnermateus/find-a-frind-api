@@ -14,6 +14,7 @@ export class InMemoryPetsRepository implements PetsRepository {
       energy_level: data.energy_level,
       level_of_independence: data.level_of_independence,
       org_id: data.org_id,
+      city: data.city,
       created_at: new Date(),
     };
 
@@ -29,5 +30,11 @@ export class InMemoryPetsRepository implements PetsRepository {
     }
 
     return pet;
+  }
+
+  async findManyByCity(city: string) {
+    const pets = this.items.filter((pet) => pet.city === city);
+
+    return pets;
   }
 }

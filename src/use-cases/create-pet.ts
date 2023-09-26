@@ -10,6 +10,7 @@ interface CreatePetUseCaseRequest {
   energy_level: "LOW" | "MEDIUM" | "HIGH";
   level_of_independence: "LOW" | "MEDIUM" | "HIGH";
   org_id: string;
+  city: string;
 }
 interface CreatePetUseCaseResponse {
   pet: PET;
@@ -28,6 +29,7 @@ export class CreatePetUseCase {
     energy_level,
     level_of_independence,
     org_id,
+    city,
   }: CreatePetUseCaseRequest): Promise<CreatePetUseCaseResponse> {
     const org = await this.orgsRespository.findById(org_id);
 
@@ -42,6 +44,7 @@ export class CreatePetUseCase {
       energy_level,
       level_of_independence,
       org_id,
+      city,
     });
 
     return { pet };

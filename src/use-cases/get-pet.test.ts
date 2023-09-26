@@ -35,6 +35,7 @@ describe("Get Pet Use Case", () => {
       birth: new Date(),
       energy_level: "HIGH",
       level_of_independence: "LOW",
+      city: "Luanda",
     });
     const { pet } = await sut.execute({
       pet_id: "pet-1",

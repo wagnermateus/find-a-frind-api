@@ -1,19 +1,18 @@
 import { InMemoryPetsRepository } from "@/Repositories/in-memory/pets-respository";
 import { it, describe, beforeEach, expect } from "vitest";
-import { CreatePetUseCase } from "./create-pet";
 import { InMemoryOrgsRepository } from "@/Repositories/in-memory/orgs-repository";
 import { hash } from "bcryptjs";
-import { ResourceNotFoundError } from "./Errors/resource-not-found-error";
+import { FetchPetsByCityUseCase } from "./fetch-pets-by-city";
 
 let petsRepository: InMemoryPetsRepository;
 let orgRepository: InMemoryOrgsRepository;
-let sut: CreatePetUseCase;
+let sut: FetchPetsByCityUseCase;
 
-describe("CreatePetUseCase", () => {
+describe("Fecth Pets Use Case", () => {
   beforeEach(async () => {
     petsRepository = new InMemoryPetsRepository();
     orgRepository = new InMemoryOrgsRepository();
-    sut = new CreatePetUseCase(petsRepository, orgRepository);
+    sut = new FetchPetsByCityUseCase(petsRepository);
 
     const password = await hash("123456", 6);
 
@@ -28,8 +27,8 @@ describe("CreatePetUseCase", () => {
     });
   });
 
-  it("should to create a pet", async () => {
-    const { pet } = await sut.execute({
+  it("should be able to list pets by city", async () => {
+    await petsRepository.create({
       org_id: "org-1",
       name: "picuto",
       about: "sweet",
@@ -38,21 +37,35 @@ describe("CreatePetUseCase", () => {
       level_of_independence: "LOW",
       city: "Luanda",
     });
+    await petsRepository.create({
+      org_id: "org-1",
+      name: "Boby",
+      about: "sweet",
+      birth: new Date(),
+      energy_level: "MEDIUM",
+      level_of_independence: "HIGH",
+      city: "Luanda",
+    });
 
-    expect(pet.id).toEqual(expect.any(String));
-  });
+    await petsRepository.create({
+      org_id: "org-1",
+      name: "Mia",
+      about: "sweet",
+      birth: new Date(),
+      energy_level: "MEDIUM",
+      level_of_independence: "HIGH",
+      city: "Benguela",
+    });
 
-  it("should not be able to create a pet with non-existent organization ID", async () => {
-    await expect(
-      sut.execute({
-        org_id: "org-2",
-        name: "picuto",
-        about: "sweet",
-        birth: new Date(),
-        energy_level: "HIGH",
-        level_of_independence: "LOW",
-        city: "Luanda",
-      })
-    ).rejects.toBeInstanceOf(ResourceNotFoundError);
+    const city = "Luanda";
+
+    const { pets } = await sut.execute({ city });
+
+    expect(pets).toHaveLength(2);
+
+    expect(pets).toEqual([
+      expect.objectContaining({ name: "picuto" }),
+      expect.objectContaining({ name: "Boby" }),
+    ]);
   });
 });

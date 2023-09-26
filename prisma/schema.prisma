@@ -43,6 +43,7 @@ model PET {
   birth                 DateTime
   energy_level          Energy
   level_of_independence Independence
+  city                  String
   created_at            DateTime     @default(now())
 
   org    ORG    @relation(fields: [org_id], references: [id])
