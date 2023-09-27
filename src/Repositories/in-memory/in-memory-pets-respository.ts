@@ -1,5 +1,5 @@
 import { Prisma, PET } from "@prisma/client";
-import { PetsRepository } from "../pets-repository";
+import { PetsRepository, SearchManyParams } from "../pets-repository";
 import { randomUUID } from "node:crypto";
 
 export class InMemoryPetsRepository implements PetsRepository {
@@ -36,5 +36,24 @@ export class InMemoryPetsRepository implements PetsRepository {
     const pets = this.items.filter((pet) => pet.city === city);
 
     return pets;
+  }
+
+  async searchMany({ energy_level, level_of_independence }: SearchManyParams) {
+    if (energy_level !== undefined && level_of_independence !== undefined) {
+      return this.items.filter(
+        (item) =>
+          item.energy_level === energy_level &&
+          item.level_of_independence === level_of_independence
+      );
+    } else if (
+      energy_level !== undefined &&
+      level_of_independence === undefined
+    ) {
+      return this.items.filter((item) => item.energy_level === energy_level);
+    } else {
+      return this.items.filter(
+        (item) => item.level_of_independence === level_of_independence
+      );
+    }
   }
 }

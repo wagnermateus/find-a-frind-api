@@ -1,7 +1,7 @@
 import { OrgsRepository } from "@/Repositories/orgs-repository";
 import { describe, it, beforeEach, expect } from "vitest";
 import { AuthenticateUseCase } from "./authenticate";
-import { InMemoryOrgsRepository } from "@/Repositories/in-memory/orgs-repository";
+import { InMemoryOrgsRepository } from "@/Repositories/in-memory/in-memory-orgs-repository";
 import { hash } from "bcryptjs";
 import { InvalidCredentialsError } from "./Errors/invalid-credencials-error";
 

@@ -1,7 +1,7 @@
-import { InMemoryPetsRepository } from "@/Repositories/in-memory/pets-respository";
+import { InMemoryPetsRepository } from "@/Repositories/in-memory/in-memory-pets-respository";
 import { it, describe, beforeEach, expect } from "vitest";
 import { GetPetUseCase } from "./get-pet";
-import { InMemoryOrgsRepository } from "@/Repositories/in-memory/orgs-repository";
+import { InMemoryOrgsRepository } from "@/Repositories/in-memory/in-memory-orgs-repository";
 import { hash } from "bcryptjs";
 
 let petsRepository: InMemoryPetsRepository;
