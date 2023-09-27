@@ -1,5 +1,6 @@
 import { app } from "@/app";
-import { it, describe, beforeAll, afterAll } from "vitest";
+import { it, describe, beforeAll, afterAll, expect } from "vitest";
+import request from "supertest";
 
 describe("Authenticate (e2e)", () => {
   beforeAll(async () => {
@@ -11,6 +12,15 @@ describe("Authenticate (e2e)", () => {
   });
 
   it("should be able to register a organization", async () => {
-    console.log("ok");
+    const response = await request(app.server).post("/orgs").send({
+      name_of_representative: "Fulano",
+      email: "orgr@email.com",
+      address: "Vila de Viana ",
+      phone: "+244930258963",
+      password: "123456",
+      nif: "123456789wlmnb",
+    });
+
+    expect(response.statusCode).toEqual(201);
   });
 });
