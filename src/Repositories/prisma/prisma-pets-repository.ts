@@ -1,4 +1,4 @@
-import { Prisma, $Enums } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { PetsRepository, SearchManyParams } from "../pets-repository";
 import { prisma } from "@/lib/prisma";
 

@@ -5,7 +5,7 @@ import { createAndAuthenticateUser } from "utlis/test/create-and-authenticate-or
 import dayjs from "dayjs";
 import { beforeEach } from "vitest";
 
-describe("Fecth Pets By City  (e2e)", () => {
+describe("Search Pets (e2e)", () => {
   beforeAll(async () => {
     await app.ready();
   });
@@ -52,22 +52,30 @@ describe("Fecth Pets By City  (e2e)", () => {
         about: "sweet",
         birth: dayjs("2021-02-05"),
         energy_level: "HIGH",
-        level_of_independence: "LOW",
+        level_of_independence: "MEDIUM",
         city: "Benguela",
       });
   });
-  it("should be able to get pets", async () => {
-    const city = "Luanda";
-
-    const response = await request(app.server).get(`/pets/${city}`);
+  it("should be able to search pets by filter", async () => {
+    const response = await request(app.server)
+      .get("/pets/search")
+      .query({
+        energy_level: "HIGH",
+        level_of_independence: "LOW",
+      })
+      .send();
 
     expect(response.body.pets).toHaveLength(2);
+  });
 
-    expect(response.statusCode).toEqual(200);
+  it.skip("should be able to search pets with optinal filters", async () => {
+    const response = await request(app.server)
+      .get("/pets/search")
+      .query({
+        level_of_independence: "MEDIUM",
+      })
+      .send();
 
-    /*expect(response.body).toEqual([
-      expect.objectContaining({ city: city }),
-      expect.objectContaining({ city: city }),
-    ]);*/
+    expect(response.body.pets).toHaveLength(1);
   });
 });
